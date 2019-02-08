@@ -9,14 +9,16 @@
    [garden.units :refer [px em pt]]))
 
 (defstyles core
-  [:.spinner-outer {:width (px 174) :height (px 174)}
+  [:.spinner-outer {:width (px 174)
+                    :height (px 174)
+                    :z-index 5}
    [:img {:width (px 75)
           :height :auto
           :position :relative
           :z-index 10
           :top (px 64)
           :left (px 51)}]
-   [:.spinner
+   [:.spinner-inner
     {:animation "rotate 1.4s linear infinite"
      :width (px 174)
      :height (px 174)

@@ -1,11 +1,11 @@
 (ns memefactory.ui.components.spinner)
 
-(defn spinner []
+(defn spin []
   [:div.spinner-outer
    [:img {:src "/assets/icons/mememouth.png"}]
-   [:svg.spinner {:width "174px"
-                  :height "174px"
-                  :viewBox"0 0 66 66"}
+   [:svg.spinner-inner {:width "174px"
+                        :height "174px"
+                        :viewBox"0 0 66 66"}
     [:circle {:fill "#FFFF"
               :cx "33"
               :cy "33"

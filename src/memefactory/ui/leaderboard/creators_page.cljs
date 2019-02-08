@@ -8,12 +8,12 @@
    [memefactory.ui.components.app-layout :refer [app-layout]]
    [memefactory.ui.components.infinite-scroll :refer [infinite-scroll]]
    [memefactory.ui.utils :as ui-utils :refer [format-price format-dank]]
+   [memefactory.ui.components.spinner :as spinner]
    [re-frame.core :refer [subscribe dispatch]]
    [reagent.core :as r]
    [taoensso.timbre :as log]
    [district.ui.router.events :as router-events]
-   [district.ui.web3-accounts.subs :as accounts-subs]
-   ))
+   [district.ui.web3-accounts.subs :as accounts-subs]))
 
 (def page-size 12)
 
@@ -83,7 +83,8 @@
             users-search (subscribe [::gql/query {:queries [(build-creators-query {:order-by order-by})]}
                                      {:id @form-data}])]
         ;;if (:graphql/loading? @users-search)
-        #_[:div "Loading ...."]
+        #_[spinner/spinner]
+
         (let [all-creators (mapcat #(get-in % [:search-users :items]) @users-search)]
 
           (log/debug "All creators" {:creators all-creators})
@@ -108,7 +109,8 @@
               [:div.scroll-area
                [:div.creators
                 (if (:graphql/loading? @users-search)
-                  [:div.loading]
+                  [spinner/spinner]
+
                   (if (empty? all-creators)
                     [:div.no-items-found "No items found."]
                     (doall

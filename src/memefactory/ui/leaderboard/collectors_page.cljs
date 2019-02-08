@@ -81,7 +81,7 @@
                                                        [:total-memes-count
                                                         :total-tokens-count]]]}])]
         (if (:graphql/loading? @users-search)
-          [:div "Loading ...."]
+          [spinner/spinner]
           (let [all-collectors (mapcat #(get-in % [:search-users :items]) @users-search)]
 
             (log/debug "All collectors" {:colectors all-collectors} :route.leaderboard/collectors)
@@ -105,7 +105,7 @@
                 [:div.scroll-area
                  [:div.collectors
                   (if (:graphql/loading? @users-search)
-                    [:div.loading]
+                    [spinner/spinner]
 
                     (if (empty? all-collectors)
                       [:div.no-items-found "No items found."]

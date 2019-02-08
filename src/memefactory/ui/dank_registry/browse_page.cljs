@@ -9,11 +9,11 @@
    [memefactory.ui.components.search :refer [search-tools]]
    [memefactory.ui.components.tiles :as tiles]
    [memefactory.ui.dank-registry.events :as mk-events]
+   [memefactory.ui.components.spinner :as spinner]
    [print.foo :refer [look] :include-macros true]
    [re-frame.core :refer [subscribe dispatch]]
    [reagent.core :as r]
-   [taoensso.timbre :as log]
-   ))
+   [taoensso.timbre :as log]))
 
 (def page-size 12)
 
@@ -54,7 +54,7 @@
     [:div.scroll-area
      [:div.tiles
       (if (:graphql/loading? @meme-search)
-        [:div.loading]
+        [spinner/spinner]
 
         (if (empty? all-memes)
           [:div.no-items-found "No items found."]

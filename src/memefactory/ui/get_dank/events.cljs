@@ -30,13 +30,19 @@
                    :on-success      [::verification-code-success]
                    :on-failure      [::verification-code-error]}})))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  ::verification-code-success
- (fn [db [_ data]]
-   ;; TODO add twilio level errors here
+ (fn [{:keys [db]} [_ {:keys [data]}]]
    (println "in verification-code-success, data:" data)
+   (let [success (get-in data [:sendVerificationCode :success])
+         msg     (get-in data [:sendVerificationCode :msg])]
+     (if success
+       {:db db}
 
-   db))
+       ;; Handle Twilio level errors here
+       {:db db
+        :dispatch [:district.ui.notification.events/show
+                   "Internal error verifying the phone number"]}))))
 
 (re-frame/reg-event-fx
  ::encrypt-verification-payload
@@ -74,12 +80,12 @@
      (println "oraclize-string:" oraclize-string)
      (when encrypted-payload
        {:dispatch
-        [::tx-events/send-tx {:instance (contract-queries/instance db :dank-faucet)
+        [::tx-events/send-tx {:instance (look (contract-queries/instance db :dank-faucet))
                               :fn :verify-and-acquire-dank
-                              :args [(-> phone-number web3/sha3)
-                                     oraclize-string]
+                              :args (look [(-> phone-number web3/sha3)
+                                           oraclize-string])
                               :tx-opts {:from active-account
-                                        :gas 500000}
+                                        :gas 6000000}
                               ;;:tx-id {:get-dank/verify-and-acquire-dank id}
                               :on-tx-success-n [[::logging/success
                                                  [::acquire-dank-success]]

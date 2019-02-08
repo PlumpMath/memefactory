@@ -20,6 +20,7 @@
    [memefactory.ui.components.panes :refer [tabbed-pane]]
    [memefactory.ui.contract.registry-entry :as registry-entry]
    [memefactory.ui.dank-registry.events :as dr-events]
+   [memefactory.ui.components.spinner :as spinner]
    [district.ui.router.events :as router-events]
    [print.foo :refer [look] :include-macros true]
    [re-frame.core :as re-frame :refer [subscribe dispatch]]
@@ -55,7 +56,8 @@
                                                             :vote/amount]]
 
                                                           :challenge/votes-total]]]}])]
-        (when-not (:graphql/loading? @response)
+        (if (:graphql/loading? @response)
+          [spinner/spin]
           (if-let [meme-voting (:meme @response)]
             (let [ch-reward-tx-id (str address "challenge-reward")
                   vote-reward-tx-id (str address "vote-reward")
